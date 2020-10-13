@@ -8,25 +8,21 @@ const {
 const router = express.Router();
 
 router.get('/all', async (req, res) => {
-  firebase.db.collection('primary').get()
-    .then(snapshot => {
-      const contents = snapshot.docs.forEach(doc => {
-        return {
-          ...doc.data(),
-        }
-      });
-      res.send({
-        message: 'success',
-        contents,
-      })
+  try {
+    const snapshot = await firebase.db.collection('primary').get()
+    const contents = snapshot.docs.map(doc => ({ ...doc.data() }));
+    console.log(contents[0])
+    res.send({
+      message: 'success',
+      contents,
     })
-    .catch((err) => {
-      console.error(err);
-      res.send({
-        message: 'fail',
-        contents: [],
-      });
+  } catch (err) {
+    console.error(err);
+    res.send({
+      message: 'fail',
+      contents: [],
     });
+  }
 });
 
 router.post('/update', async (req, res) => {
