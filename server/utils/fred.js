@@ -2,14 +2,15 @@ require('dotenv').config();
 const axios = require('axios');
 
 const API_KEY = process.env.FRED;
+// 트럼프 당선 이후: 2017/01/01
 
 // 경제성장률: 분기
 // 가처분소득: 월
-// 주식가격(Dow, S&P, NASDAQ)
-// 주택가격지수
-// 임금상승률: Earning
-// 실업률 
-// 인플레이션율
+// 주식가격(Dow, NASDAQ): 일
+// 주택가격지수: 월
+// 임금상승률: Earning: 월
+// 실업률: 월
+// 인플레이션율: 월
 const list = [
   'gdp',
   'disposable',
@@ -21,7 +22,7 @@ const list = [
   'inflationRate'
 ]
 function urlGenerator(code, unit='lin') {
-  return`https://api.stlouisfed.org/fred/series/observations?series_id=${code}&api_key=${API_KEY}&file_type=json&units=${unit}&frequency=q`;
+  return`https://api.stlouisfed.org/fred/series/observations?series_id=${code}&api_key=${API_KEY}&file_type=json&units=${unit}&observation_start=2017-01-01&observation_end=2020-12-31`;
 };
 
 async function getData() {
@@ -40,6 +41,7 @@ async function getData() {
 }
 
 function parseObservation(data) {
+  // console.log('11', data);
   return data.map(({ data: { observations }}, i) => (
     {
       title: list[i],

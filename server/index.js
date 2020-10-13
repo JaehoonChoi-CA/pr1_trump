@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const logger = require('morgan');
 const apis = require('./router');
 
+console.log('hello');
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
